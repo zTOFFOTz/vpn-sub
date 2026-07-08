@@ -1,0 +1,388 @@
+# FF Clash/Mihomo profile
+# Source: existing working servers from zTOFFOTz/vpn-sub/sub.txt
+# Logic: RU sites/IP -> DIRECT, ChatGPT/OpenAI -> existing Germany/EU servers, others -> proxy group.
+
+port: 7890
+socks-port: 7891
+mixed-port: 7897
+redir-port: 7892
+tproxy-port: 7893
+allow-lan: false
+bind-address: '*'
+mode: rule
+log-level: info
+ipv6: false
+external-controller: 127.0.0.1:9090
+find-process-mode: strict
+unified-delay: true
+tcp-concurrent: true
+geodata-mode: true
+geodata-loader: standard
+global-client-fingerprint: chrome
+
+profile:
+  store-selected: true
+  store-fake-ip: false
+
+tun:
+  enable: true
+  stack: mixed
+  auto-route: true
+  auto-detect-interface: true
+  strict-route: false
+  dns-hijack:
+    - any:53
+    - tcp://any:53
+
+sniffer:
+  enable: true
+  parse-pure-ip: true
+  override-destination: true
+  sniff:
+    TLS:
+      ports: [443, 8443]
+    HTTP:
+      ports: [80, 8080-8880]
+  force-domain:
+    - +.chatgpt.com
+    - +.openai.com
+    - +.oaistatic.com
+    - +.oaiusercontent.com
+    - +.openaiusercontent.com
+    - +.chat.com
+    - +.auth0.com
+    - +.arkoselabs.com
+  skip-domain:
+    - +.lan
+    - +.local
+    - +.ru
+    - +.рф
+    - +.su
+    - +.gosuslugi.ru
+    - +.ozon.ru
+    - +.wildberries.ru
+    - +.yandex.ru
+    - +.vk.com
+    - +.mail.ru
+
+dns:
+  enable: true
+  listen: 0.0.0.0:1053
+  ipv6: false
+  enhanced-mode: redir-host
+  default-nameserver:
+    - 77.88.8.8
+    - 1.1.1.1
+    - 8.8.8.8
+  nameserver:
+    - https://cloudflare-dns.com/dns-query
+    - https://dns.google/dns-query
+    - 77.88.8.8
+  proxy-server-nameserver:
+    - https://cloudflare-dns.com/dns-query
+    - https://dns.google/dns-query
+  direct-nameserver:
+    - 77.88.8.8
+    - 8.8.8.8
+  nameserver-policy:
+    "+.ru": [77.88.8.8, 8.8.8.8]
+    "+.рф": [77.88.8.8, 8.8.8.8]
+    "+.su": [77.88.8.8, 8.8.8.8]
+    "+.gosuslugi.ru": [77.88.8.8, 8.8.8.8]
+    "+.gu-st.ru": [77.88.8.8, 8.8.8.8]
+    "+.ozon.ru": [77.88.8.8, 8.8.8.8]
+    "+.o3.ru": [77.88.8.8, 8.8.8.8]
+    "+.wildberries.ru": [77.88.8.8, 8.8.8.8]
+    "+.wb.ru": [77.88.8.8, 8.8.8.8]
+    "+.yandex.ru": [77.88.8.8, 8.8.8.8]
+    "+.ya.ru": [77.88.8.8, 8.8.8.8]
+    "+.vk.com": [77.88.8.8, 8.8.8.8]
+    "+.mail.ru": [77.88.8.8, 8.8.8.8]
+    "+.chatgpt.com": [https://cloudflare-dns.com/dns-query, https://dns.google/dns-query]
+    "+.openai.com": [https://cloudflare-dns.com/dns-query, https://dns.google/dns-query]
+    "+.oaistatic.com": [https://cloudflare-dns.com/dns-query, https://dns.google/dns-query]
+    "+.oaiusercontent.com": [https://cloudflare-dns.com/dns-query, https://dns.google/dns-query]
+
+proxies:
+  - name: 🇩🇪 Германия Автовыбор №2
+    type: vless
+    server: 104.167.24.211
+    port: 443
+    uuid: bb0479c9-9d28-45d4-980f-b63b72f89636
+    udp: true
+    tls: true
+    network: grpc
+    servername: dl.google.com
+    client-fingerprint: qq
+    skip-cert-verify: false
+    encryption: none
+    reality-opts:
+      public-key: 6CHUluOn_Tdab7JOfUArmcfQPVEd4PbEQJMPvKWElhw
+    grpc-opts:
+      grpc-service-name: grpc-tunnel
+      grpc-mode: multi
+
+  - name: 🇩🇪 Германия №4
+    type: vless
+    server: 194.107.126.214
+    port: 443
+    uuid: bb0479c9-9d28-45d4-980f-b63b72f89636
+    udp: true
+    tls: true
+    network: tcp
+    servername: google.com
+    client-fingerprint: qq
+    skip-cert-verify: false
+    encryption: none
+    reality-opts:
+      public-key: ZWB4zXAU2qX3LE-qFsYHH0iLckIz10inAHCmGOdDHhg
+    flow: xtls-rprx-vision
+
+  - name: 🇷🇺 Ютуб без рекламы
+    type: vless
+    server: 193.163.203.41
+    port: 443
+    uuid: bb0479c9-9d28-45d4-980f-b63b72f89636
+    udp: true
+    tls: true
+    network: grpc
+    servername: dl.google.com
+    client-fingerprint: qq
+    skip-cert-verify: false
+    encryption: none
+    reality-opts:
+      public-key: 6CHUluOn_Tdab7JOfUArmcfQPVEd4PbEQJMPvKWElhw
+    grpc-opts:
+      grpc-service-name: grpc-tunnel
+      grpc-mode: multi
+
+  - name: 🇪🇺 Обход все операторы №13
+    type: vless
+    server: 185.229.9.229
+    port: 443
+    uuid: bb0479c9-9d28-45d4-980f-b63b72f89636
+    udp: true
+    tls: true
+    network: tcp
+    servername: api-maps.yandex.ru
+    client-fingerprint: chrome
+    skip-cert-verify: false
+    encryption: none
+    reality-opts:
+      public-key: zMyJW8uYeZwurz4xCcnnPjYlCVP0nI5BDHp_0ZrxPjk
+    flow: xtls-rprx-vision
+
+  - name: 🇪🇺 Обход все операторы №14
+    type: vless
+    server: 62.152.58.128
+    port: 443
+    uuid: bb0479c9-9d28-45d4-980f-b63b72f89636
+    udp: true
+    tls: true
+    network: tcp
+    servername: api-maps.yandex.ru
+    client-fingerprint: qq
+    skip-cert-verify: false
+    encryption: none
+    reality-opts:
+      public-key: zMyJW8uYeZwurz4xCcnnPjYlCVP0nI5BDHp_0ZrxPjk
+    flow: xtls-rprx-vision
+
+proxy-groups:
+  - name: 🚀 PROXY
+    type: select
+    proxies:
+      - 🤖 CHATGPT_OPENAI
+      - 🇩🇪 GERMANY_AUTO
+      - 🇩🇪 Германия Автовыбор №2
+      - 🇩🇪 Германия №4
+      - 🇪🇺 EU_AUTO
+      - 🇪🇺 Обход все операторы №13
+      - 🇪🇺 Обход все операторы №14
+      - DIRECT
+
+  - name: 🤖 CHATGPT_OPENAI
+    type: select
+    proxies:
+      - 🇩🇪 GERMANY_AUTO
+      - 🇩🇪 Германия Автовыбор №2
+      - 🇩🇪 Германия №4
+      - 🇪🇺 EU_AUTO
+      - 🇪🇺 Обход все операторы №13
+      - 🇪🇺 Обход все операторы №14
+      - DIRECT
+
+  - name: 🇩🇪 GERMANY_AUTO
+    type: url-test
+    proxies:
+      - 🇩🇪 Германия Автовыбор №2
+      - 🇩🇪 Германия №4
+    url: https://www.gstatic.com/generate_204
+    interval: 180
+    tolerance: 80
+
+  - name: 🇪🇺 EU_AUTO
+    type: url-test
+    proxies:
+      - 🇪🇺 Обход все операторы №13
+      - 🇪🇺 Обход все операторы №14
+      - 🇩🇪 Германия Автовыбор №2
+      - 🇩🇪 Германия №4
+    url: https://www.gstatic.com/generate_204
+    interval: 180
+    tolerance: 100
+
+  - name: ▶️ YOUTUBE
+    type: select
+    proxies:
+      - DIRECT
+      - 🇷🇺 Ютуб без рекламы
+      - 🚀 PROXY
+
+rules:
+  - DOMAIN-SUFFIX,chatgpt.com,🤖 CHATGPT_OPENAI
+  - DOMAIN-SUFFIX,chat.openai.com,🤖 CHATGPT_OPENAI
+  - DOMAIN-SUFFIX,openai.com,🤖 CHATGPT_OPENAI
+  - DOMAIN-SUFFIX,api.openai.com,🤖 CHATGPT_OPENAI
+  - DOMAIN-SUFFIX,platform.openai.com,🤖 CHATGPT_OPENAI
+  - DOMAIN-SUFFIX,auth.openai.com,🤖 CHATGPT_OPENAI
+  - DOMAIN-SUFFIX,oaistatic.com,🤖 CHATGPT_OPENAI
+  - DOMAIN-SUFFIX,oaiusercontent.com,🤖 CHATGPT_OPENAI
+  - DOMAIN-SUFFIX,openaiusercontent.com,🤖 CHATGPT_OPENAI
+  - DOMAIN-SUFFIX,cdn.openai.com,🤖 CHATGPT_OPENAI
+  - DOMAIN-SUFFIX,chat.com,🤖 CHATGPT_OPENAI
+  - DOMAIN-SUFFIX,ai.com,🤖 CHATGPT_OPENAI
+  - DOMAIN-SUFFIX,auth0.com,🤖 CHATGPT_OPENAI
+  - DOMAIN-SUFFIX,arkoselabs.com,🤖 CHATGPT_OPENAI
+  - DOMAIN-SUFFIX,funcaptcha.com,🤖 CHATGPT_OPENAI
+  - DOMAIN-SUFFIX,intercom.io,🤖 CHATGPT_OPENAI
+  - DOMAIN-SUFFIX,intercomcdn.com,🤖 CHATGPT_OPENAI
+  - DOMAIN-SUFFIX,sentry.io,🤖 CHATGPT_OPENAI
+  - DOMAIN-SUFFIX,featuregates.org,🤖 CHATGPT_OPENAI
+  - DOMAIN-SUFFIX,statsigapi.net,🤖 CHATGPT_OPENAI
+  - DOMAIN-SUFFIX,segment.io,🤖 CHATGPT_OPENAI
+  - DOMAIN-SUFFIX,segment.com,🤖 CHATGPT_OPENAI
+  - DOMAIN-SUFFIX,launchdarkly.com,🤖 CHATGPT_OPENAI
+  - DOMAIN-KEYWORD,chatgpt,🤖 CHATGPT_OPENAI
+  - DOMAIN-KEYWORD,openai,🤖 CHATGPT_OPENAI
+  - DOMAIN-KEYWORD,oaistatic,🤖 CHATGPT_OPENAI
+  - DOMAIN-KEYWORD,oaiusercontent,🤖 CHATGPT_OPENAI
+  - DOMAIN-SUFFIX,youtube.com,▶️ YOUTUBE
+  - DOMAIN-SUFFIX,youtu.be,▶️ YOUTUBE
+  - DOMAIN-SUFFIX,googlevideo.com,▶️ YOUTUBE
+  - DOMAIN-SUFFIX,ytimg.com,▶️ YOUTUBE
+  - DOMAIN-SUFFIX,ggpht.com,▶️ YOUTUBE
+  - DOMAIN-SUFFIX,gosuslugi.ru,DIRECT
+  - DOMAIN-SUFFIX,esia.gosuslugi.ru,DIRECT
+  - DOMAIN-SUFFIX,gu-st.ru,DIRECT
+  - DOMAIN-SUFFIX,pos.gosuslugi.ru,DIRECT
+  - DOMAIN-SUFFIX,lk.gosuslugi.ru,DIRECT
+  - DOMAIN-SUFFIX,dom.gosuslugi.ru,DIRECT
+  - DOMAIN-SUFFIX,epgu.gosuslugi.ru,DIRECT
+  - DOMAIN-SUFFIX,nalog.gov.ru,DIRECT
+  - DOMAIN-SUFFIX,nalog.ru,DIRECT
+  - DOMAIN-SUFFIX,mos.ru,DIRECT
+  - DOMAIN-SUFFIX,mvd.ru,DIRECT
+  - DOMAIN-SUFFIX,pfr.gov.ru,DIRECT
+  - DOMAIN-SUFFIX,sfr.gov.ru,DIRECT
+  - DOMAIN-SUFFIX,zakupki.gov.ru,DIRECT
+  - DOMAIN-SUFFIX,rosreestr.gov.ru,DIRECT
+  - DOMAIN-SUFFIX,fssp.gov.ru,DIRECT
+  - DOMAIN-SUFFIX,cbr.ru,DIRECT
+  - DOMAIN-SUFFIX,ozon.ru,DIRECT
+  - DOMAIN-SUFFIX,o3.ru,DIRECT
+  - DOMAIN-SUFFIX,ozone.ru,DIRECT
+  - DOMAIN-SUFFIX,ozonusercontent.com,DIRECT
+  - DOMAIN-SUFFIX,ozonusercontent.ru,DIRECT
+  - DOMAIN-SUFFIX,ozoncdn.com,DIRECT
+  - DOMAIN-SUFFIX,cdn-ozon.ru,DIRECT
+  - DOMAIN-SUFFIX,ozon-st.cdn.ngenix.net,DIRECT
+  - DOMAIN-SUFFIX,wildberries.ru,DIRECT
+  - DOMAIN-SUFFIX,wb.ru,DIRECT
+  - DOMAIN-SUFFIX,wbbasket.ru,DIRECT
+  - DOMAIN-SUFFIX,wbstatic.net,DIRECT
+  - DOMAIN-SUFFIX,wbstatic.ru,DIRECT
+  - DOMAIN-SUFFIX,wbcontent.ru,DIRECT
+  - DOMAIN-SUFFIX,avito.ru,DIRECT
+  - DOMAIN-SUFFIX,youla.ru,DIRECT
+  - DOMAIN-SUFFIX,market.yandex.ru,DIRECT
+  - DOMAIN-SUFFIX,aliexpress.ru,DIRECT
+  - DOMAIN-SUFFIX,dns-shop.ru,DIRECT
+  - DOMAIN-SUFFIX,citilink.ru,DIRECT
+  - DOMAIN-SUFFIX,mvideo.ru,DIRECT
+  - DOMAIN-SUFFIX,eldorado.ru,DIRECT
+  - DOMAIN-SUFFIX,lamoda.ru,DIRECT
+  - DOMAIN-SUFFIX,megamarket.ru,DIRECT
+  - DOMAIN-SUFFIX,sbermegamarket.ru,DIRECT
+  - DOMAIN-SUFFIX,cdek.ru,DIRECT
+  - DOMAIN-SUFFIX,pochta.ru,DIRECT
+  - DOMAIN-SUFFIX,russianpost.ru,DIRECT
+  - DOMAIN-SUFFIX,boxberry.ru,DIRECT
+  - DOMAIN-SUFFIX,samokat.ru,DIRECT
+  - DOMAIN-SUFFIX,vkusvill.ru,DIRECT
+  - DOMAIN-SUFFIX,magnit.ru,DIRECT
+  - DOMAIN-SUFFIX,lenta.com,DIRECT
+  - DOMAIN-SUFFIX,auchan.ru,DIRECT
+  - DOMAIN-SUFFIX,fix-price.com,DIRECT
+  - DOMAIN-SUFFIX,sberbank.ru,DIRECT
+  - DOMAIN-SUFFIX,sber.ru,DIRECT
+  - DOMAIN-SUFFIX,online.sberbank.ru,DIRECT
+  - DOMAIN-SUFFIX,id.sber.ru,DIRECT
+  - DOMAIN-SUFFIX,pay.sber.ru,DIRECT
+  - DOMAIN-SUFFIX,sberpay.ru,DIRECT
+  - DOMAIN-SUFFIX,tbank.ru,DIRECT
+  - DOMAIN-SUFFIX,tinkoff.ru,DIRECT
+  - DOMAIN-SUFFIX,id.tbank.ru,DIRECT
+  - DOMAIN-SUFFIX,vtb.ru,DIRECT
+  - DOMAIN-SUFFIX,alfabank.ru,DIRECT
+  - DOMAIN-SUFFIX,gazprombank.ru,DIRECT
+  - DOMAIN-SUFFIX,raiffeisen.ru,DIRECT
+  - DOMAIN-SUFFIX,pochtabank.ru,DIRECT
+  - DOMAIN-SUFFIX,mkb.ru,DIRECT
+  - DOMAIN-SUFFIX,rshb.ru,DIRECT
+  - DOMAIN-SUFFIX,domclick.ru,DIRECT
+  - DOMAIN-SUFFIX,mironline.ru,DIRECT
+  - DOMAIN-SUFFIX,nspk.ru,DIRECT
+  - DOMAIN-SUFFIX,yookassa.ru,DIRECT
+  - DOMAIN-SUFFIX,yoomoney.ru,DIRECT
+  - DOMAIN-SUFFIX,robokassa.ru,DIRECT
+  - DOMAIN-SUFFIX,cloudpayments.ru,DIRECT
+  - DOMAIN-SUFFIX,paykeeper.ru,DIRECT
+  - DOMAIN-SUFFIX,uniteller.ru,DIRECT
+  - DOMAIN-SUFFIX,yandex.ru,DIRECT
+  - DOMAIN-SUFFIX,ya.ru,DIRECT
+  - DOMAIN-SUFFIX,yastatic.net,DIRECT
+  - DOMAIN-SUFFIX,yandex.net,DIRECT
+  - DOMAIN-SUFFIX,yandex.com,DIRECT
+  - DOMAIN-SUFFIX,yandex.st,DIRECT
+  - DOMAIN-SUFFIX,yandexcloud.net,DIRECT
+  - DOMAIN-SUFFIX,mc.yandex.ru,DIRECT
+  - DOMAIN-SUFFIX,clck.ru,DIRECT
+  - DOMAIN-SUFFIX,vk.com,DIRECT
+  - DOMAIN-SUFFIX,vk.ru,DIRECT
+  - DOMAIN-SUFFIX,vk.me,DIRECT
+  - DOMAIN-SUFFIX,userapi.com,DIRECT
+  - DOMAIN-SUFFIX,cdn.userapi.com,DIRECT
+  - DOMAIN-SUFFIX,vkuseraudio.net,DIRECT
+  - DOMAIN-SUFFIX,vkuserlive.net,DIRECT
+  - DOMAIN-SUFFIX,static.vk.com,DIRECT
+  - DOMAIN-SUFFIX,mail.ru,DIRECT
+  - DOMAIN-SUFFIX,imgsmail.ru,DIRECT
+  - DOMAIN-SUFFIX,ok.ru,DIRECT
+  - DOMAIN-SUFFIX,mycdn.me,DIRECT
+  - DOMAIN-SUFFIX,2gis.ru,DIRECT
+  - DOMAIN-SUFFIX,drom.ru,DIRECT
+  - DOMAIN-SUFFIX,rutube.ru,DIRECT
+  - DOMAIN-SUFFIX,kinopoisk.ru,DIRECT
+  - DOMAIN-SUFFIX,ivi.ru,DIRECT
+  - DOMAIN-SUFFIX,okko.tv,DIRECT
+  - DOMAIN-SUFFIX,start.ru,DIRECT
+  - DOMAIN-SUFFIX,more.tv,DIRECT
+  - DOMAIN-SUFFIX,ru,DIRECT
+  - DOMAIN-SUFFIX,рф,DIRECT
+  - DOMAIN-SUFFIX,su,DIRECT
+  - GEOSITE,category-ru,DIRECT
+  - GEOSITE,private,DIRECT
+  - GEOIP,private,DIRECT,no-resolve
+  - GEOIP,RU,DIRECT,no-resolve
+  - MATCH,🚀 PROXY
